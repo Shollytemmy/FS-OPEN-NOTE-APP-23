@@ -1,15 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Note from './Components/Note'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import axios from 'axios'
 
 
 
 
-function App(props) {
-  const [notes, setNotes] = useState(props.notes)
+function App() {
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+
+  useEffect(() => {
+
+    console.log("useEffect")
+
+    axios.get("http://127.0.0.1:5174/notes")
+
+    .then((response) => {
+
+      console.log("promise Fulffilled")
+
+      setNotes(response.data)
+    })
+
+  }, [])
+
+  console.log("render", notes.length, "notes")
 
 
 
