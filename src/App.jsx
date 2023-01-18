@@ -20,15 +20,12 @@ function App() {
     axios.get("http://127.0.0.1:5174/notes")
 
     .then((response) => {
-
-      console.log("promise Fulffilled")
-
       setNotes(response.data)
     })
 
   }, [])
 
-  console.log("render", notes.length, "notes")
+  
 
 
 
@@ -40,7 +37,20 @@ function App() {
   const addNote = (e) => {
     e.preventDefault()
 
-    setNotes([...notes, {id: notes.length + 1, content: newNote, date: new Date().toISOString(), important: Math.random() < 0.5}])
+
+    if(!newNote) return 
+
+    const noteObj = {
+      content: newNote,
+      date: new Date().toISOString(),
+      important: Math.random() < 0.5
+    }
+
+    axios.post('http://127.0.0.1:5174/notes', noteObj)
+    .then((response) => {
+      console.log(response)
+      setNotes(notes.concat(response.data))
+    })
 
     setNewNote("")
   
