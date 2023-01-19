@@ -64,6 +64,24 @@ function App() {
   }
 
 
+  const toggleImportanceOf = (id) => {
+    const url = `http://127.0.0.1:5174/notes/${id}`
+
+   const note = notes.find((n) => n.id === id)
+   const changeNote = {...note, important: !note.important}
+
+   axios.put(url, changeNote)
+   .then((response) => {
+
+    let noteMapped = notes.map((n) => n.id === id ? response.data : n)
+
+    setNotes(noteMapped)
+
+   })
+
+  }
+
+
 
   return (
     <div className="App">
@@ -76,7 +94,7 @@ function App() {
       </div>
        <ul>
        {
-        noteToShow.map((note) => <Note note={note} key={note.id} />)
+        noteToShow.map((note) => <Note note={note} key={note.id} toggleImportance={() => toggleImportanceOf(note.id)} />)
        }
       </ul>
 
