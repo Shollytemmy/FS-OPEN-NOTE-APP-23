@@ -35,6 +35,18 @@
       "date": "2023-01-19T15:39:13.744Z",
       "important": true,
       "id": 6
+    },
+    {
+      "content": "fetched",
+      "date": "2023-01-19T16:11:58.546Z",
+      "important": true,
+      "id": 7
+    },
+    {
+      "content": "Post",
+      "date": "2023-01-19T16:13:53.143Z",
+      "important": false,
+      "id": 8
     }
   ]
 }

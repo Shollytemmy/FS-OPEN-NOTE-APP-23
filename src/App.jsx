@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Note from './Components/Note'
+import noteServices from './services/notes'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from 'axios'
@@ -17,8 +18,7 @@ function App() {
 
     console.log("useEffect")
 
-    axios.get("http://127.0.0.1:5174/notes")
-
+    noteServices.getAll()
     .then((response) => {
       setNotes(response.data)
     })
@@ -46,7 +46,7 @@ function App() {
       important: Math.random() < 0.5
     }
 
-    axios.post('http://127.0.0.1:5174/notes', noteObj)
+    noteServices.create(noteObj)
     .then((response) => {
       console.log(response)
       setNotes(notes.concat(response.data))
@@ -70,7 +70,7 @@ function App() {
    const note = notes.find((n) => n.id === id)
    const changeNote = {...note, important: !note.important}
 
-   axios.put(url, changeNote)
+   noteServices.update(id, changeNote)
    .then((response) => {
 
     let noteMapped = notes.map((n) => n.id === id ? response.data : n)
@@ -78,6 +78,14 @@ function App() {
     setNotes(noteMapped)
 
    })
+
+   .catch(error => {
+      alert(
+        `the note '${note.content}' was already deleted from server`
+      )
+      setNotes(notes.filter(n => n.id !== id))
+    })
+   
 
   }
 
