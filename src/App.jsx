@@ -4,6 +4,8 @@ import noteServices from './services/notes'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from 'axios'
+import { Notification } from './Components/Notification'
+import { Footer } from './Components/Footer'
 
 
 
@@ -12,11 +14,11 @@ function App() {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
 
   useEffect(() => {
 
-    console.log("useEffect")
 
     noteServices.getAll()
     .then((response) => {
@@ -59,13 +61,13 @@ function App() {
   }
 
   const handleNoteChange = (e) => {
-    console.log("input", e.target.value)
+    
     setNewNote(e.target.value)
   }
 
 
   const toggleImportanceOf = (id) => {
-    const url = `http://127.0.0.1:5174/notes/${id}`
+    // const url = `http://127.0.0.1:5174/notes/${id}`
 
    const note = notes.find((n) => n.id === id)
    const changeNote = {...note, important: !note.important}
@@ -80,11 +82,16 @@ function App() {
    })
 
    .catch(error => {
-      alert(
-        `the note '${note.content}' was already deleted from server`
-      )
-      setNotes(notes.filter(n => n.id !== id))
-    })
+
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
+      })
    
 
   }
@@ -94,6 +101,7 @@ function App() {
   return (
     <div className="App">
       <h1>Fs-Open 2023</h1>
+      <Notification message ={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important": "All"}
@@ -110,7 +118,7 @@ function App() {
         <input type="text" value={newNote} onChange={handleNoteChange} />
         <button type="submit">Save</button>
       </form>
-     
+     <Footer />
 
     </div>
   )
